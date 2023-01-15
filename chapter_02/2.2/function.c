@@ -1,7 +1,7 @@
 //
 // Created by zzj on 2022/11/12.
 //
-
+#include "function.h"
 int nCompletionStatus = 0;
 
 float add(float x, float y){

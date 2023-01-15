@@ -1,6 +1,7 @@
-//
+// function.c
 // Created by zzj on 2022/11/12.
 //
+
 #include "function.h"
 int nCompletionStatus = 0;
 

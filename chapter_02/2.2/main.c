@@ -1,3 +1,7 @@
+// main.c
+// Created by zzj on 2022/11/12.
+//
+
 #include "function.h"
 extern int nCompletionStatus=0;
 int main() {
@@ -7,7 +11,5 @@ int main() {
 
     z= add_and_multiply(x,y);
     nCompletionStatus=1;
-
-
     return 0;
 }

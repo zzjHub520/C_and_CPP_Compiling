@@ -153,21 +153,214 @@ int main(int argc, char* argv[]) {
 
 ### 2.3.5 编译过程的局限性
 
-asdf
-
 ## 2.4 链接
 
+### 2.4.1 链接定位
 
+#### 1. 重定位
 
+#### 2. 解析引用
 
+#### 3. 演示项目：链接示例
+
+```sh
+# 编译项目
+gcc -c function.c main.c
+gcc function.o main.o -o demoApp
+# 反汇编
+objdump -D -M intel main.o
+objdump -D -M intel demoApp
+# 执行下面这条命令，可以对含有未初始化数据的.bss节进行反汇编操作
+objdump -x -j .bss demoApp
+```
+
+### 2.4.2 链接器视角
 
 # 第三章 加装程序执行阶段
 
+## 3.1 shell 的重要性
+
+## 3.2 内核的作用
+
+## 3.3 装载器的作用
+
+### 3.3.1 装载器视角下的二进制文件（节与段）
+
+我们使用了readelf工具来检查段，可以看到多个不同的链接器被分组合并成装载器段。
+
+### 3.3.2 程序加载阶段
+
+```sh
+readelf --segments libmreloc.so
+```
+
+## 3.4 程序执行入口点
+
+#### 3.4.1 装载器查找入口点
+
+#### 3.4.2 _start() 函数的作用
+
+#### 3.4.3 __libc_start_main() 函数的作用
+
+#### 3.4.4 栈和调用惯例
+
 # 第四章 重要概念的作用
+
+# 4.1 静态库
+
+
+
+# 4.2 动态库
+
+### 4.2.1 动态库和共享库
+
+### 4.2.2 动态库链接详解
+
+### 4.2.3 Windows平台时中动态链接的特点
+
+### 4.2.4 动态库的特点
+
+### 4.2.5 引用程序二进制接口（ABI）
+
+## 4.3 静态库和动态库对比
+
+### 4.3.1 导入选择条件的差异
+
+#### 1. 静态库的导入选择条件
+
+#### 2. 动态库的导入选择条件
+
+#### 3. 导入完整归档的情况
+
+```sh
+gcc -fPIC <source files> -Wl,--whole-archive -l<static libraries> -o <shlib filename>
+gcc -fPIC <source files> -o <execuable-output-file> -Wl,--whole-archive -l<libraries-to-be-entirely-linked-in> -Wl,--no-whole-archive -l<all-other-libraries> 
+```
+
+### 4.3.2 部署难题
+
+## 4.4 一些有用的类比 
 
 # 第五章 使用静态库
 
+## 5.1 创建静态库
+
+### 5.1.1 创建 Linux 静态库
+
+```sh
+gcc -c first.c second.c
+ar rcs libstaticlib.a first.o second.o
+```
+
+### 5.1.2 创建 Windows静态库
+
+## 5.2 使用静态库
+
+## 5.3 静态库设计技巧
+
+### 5.3.1 丢失符号可见性和唯一性的可能性
+
+### 5.3.2 静态库使用禁忌
+
+### 5.3.3 静态库链接的具体规则
+
+### 5.3.4 将静态库转成动态库
+
+- 使用打包工具（ar）来提取所以静态库的目标文件，如：
+
+  ```sh
+  ar -x <static library>.a
+  ```
+
+- 链接器使用提取出来的目标文件集合构建动态库
+
+### 5.3.5 静态库在64位Linux平台上的问题
+
 # 第六章 设计动态链接库：基础篇
+
+## 6.1 创建动态链接库
+
+### 6.1.1 在Linux中创建动态库
+
+通常来说，构建动态库的过程至少需要下面两个选项：
+
+- -fPIC 编译器选项
+- -shared 链接器选项
+
+下面简单示例演示了从两个源代码文件创建动态库的过程：
+
+```sh
+gcc -fPIC -c first.c second.c
+gcc -shared first.o second.o -o libdynamiclib.so
+```
+
+### 6.1.2 在Windows中创建动态库
+
+## 6.2 设计动态库
+
+### 6.2.1 设计二进制接口
+
+### 6.2.2 设计应用程序的二进制接口
+
+### 6.2.3 控制动态库符号的可见性
+
+#### 1. 导出Linux动态库符号
+
+**在构建过程中控制符号的可见性**
+
+方法1：（影响所有代码）
+
+```sh
+-fvisibility=hidden
+```
+
+方法2：（只影响单个符号）
+
+```cpp
+__attribute__((visibility("<default | hidden>")))
+```
+
+方法3：（影响单个符号或者一组符号）
+
+```cpp
+// 该选项通常用在头文件中
+#pragma visibility push(hidden)
+void someprivatefunction_1(void);
+void someprivatefunction_2(void);
+// ...
+void someprivatefunction_N(void);
+#pragma visibility pop
+```
+
+#### 2. 演示示例：控制符号的可见性
+
+##### 使用 strip 工具
+
+```sh
+
+```
+
+
+
+
+
+#### 3. 导出Windows动态链接库符号
+
+
+
+### 6.2.4 完成链接需要满足的条件
+
+
+
+## 6.3动态链接模式
+
+### 6.3. 加载时动态链接
+
+### 6.3. 运行时动态链接
+
+### 6.3. 比较两种动态库链接模式
+
+
 
 # 第七章 定位库文件
 
